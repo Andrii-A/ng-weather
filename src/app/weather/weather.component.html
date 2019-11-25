@@ -1,0 +1,83 @@
+<div>
+
+  <div class="panel">
+    <div>
+      <input type="text" [(ngModel)]="searchLocation" placeholder="Input City, CountryCode and press enter"
+             (keydown.enter)="getForecast()">
+      <div *ngIf="showError" class="panel__error">Error... Try to type another location!</div>
+
+    </div>
+
+
+    <button (click)="toggleScale()">{{currentScale}}</button>
+  </div>
+
+
+  <div *ngIf="fullForecast" class="wrapper">
+    <div class="location">{{fullForecast.city.name}}, {{fullForecast.city.country}}</div>
+
+    <div class="main">
+      <div class="main__item main__item--date-time">
+        <div class="main__item main__item__time">
+          {{selectedDay.dt_txt | date: (currentScale === 'metric' ? 'H:mm' : 'h:mm a') }}
+        </div>
+
+        <div class="main__item main__item__date">
+          {{selectedDay.dt_txt | date: 'EE, MMM d, y'}}
+        </div>
+      </div>
+
+      <div class="main__item main__item--info">
+        <i [ngClass]="'wi wi-owm-' + selectedDay.weather[0].id"></i>
+        <div>{{selectedDay.weather[0].description}}</div>
+      </div>
+
+      <div class="main__item main__item--temps">
+        <div class="main__item__temp">{{selectedDay.main.temp | temp: currentScale}}</div>
+        <div class="main__item__min-max">
+          {{selectedDay.main.temp_min | temp: currentScale}} |
+          {{selectedDay.main.temp_max | temp: currentScale}}
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="info">
+      <div class="info__item">
+        <i class="wi wi-humidity"></i> {{selectedDay.main.humidity}}%
+      </div>
+
+      <div class="info__item">
+        <i class="wi wi-barometer"></i> {{selectedDay.main.pressure | pressure: currentScale}}
+      </div>
+
+      <div class="info__item">
+        <i class="wi wi-wind-direction" [ngStyle]="{transform: 'rotate(' + selectedDay.wind.deg + 'deg)'}"></i>
+        {{selectedDay.wind.speed | speed: currentScale}}
+      </div>
+
+    </div>
+
+
+    <ul class="buttons">
+      <li *ngFor="let day of fiveDaysList; let i = index"
+          (click)="setCurrent(i)" (keydown)="setCurrent(i)"
+          class="button" [ngClass]="{'button--selected': day.selected}"
+          tabindex="0" role="button" [attr.aria-pressed]="day.selected">
+
+        <div class="button__day">{{day.dt_txt | date: 'EEEE'}}</div>
+
+        <div class="button__icon"><i [ngClass]="'wi wi-owm-' + day.weather[0].id"></i></div>
+
+        <div class="button__temp">{{day.main.temp| temp: currentScale}}</div>
+
+        <div class="button__min-max">
+          {{day.main.temp_min| temp: currentScale}} | {{day.main.temp_max| temp: currentScale}}
+        </div>
+
+      </li>
+    </ul>
+
+  </div>
+</div>
