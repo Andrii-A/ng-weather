@@ -62,7 +62,7 @@
 
     <ul class="buttons">
       <li *ngFor="let day of fiveDaysList; let i = index"
-          (click)="setCurrent(i)" (keydown)="setCurrent(i)"
+          (click)="setCurrent(i)" (keydown.enter)="setCurrent(i)"
           class="button" [ngClass]="{'button--selected': day.selected}"
           tabindex="0" role="button" [attr.aria-pressed]="day.selected">
 
